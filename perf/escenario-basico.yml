@@ -1,0 +1,34 @@
+config:
+  environments:
+    api:
+      target: 'http://localhost:5555' 
+      plugins:
+        statsd:
+          host: localhost
+          port: 8125
+          prefix: "artillery-basico"
+  phases:
+    - name: "Ramp up"
+      duration: 30
+      arrivalRate: 1
+      rampTo: 3
+    - name: "Sustained load"
+      duration: 60
+      arrivalRate: 3
+  escenarios:
+    - name: "Consulta de tasas"
+      weight: 70
+      flow:
+        - get:
+            url: '/rates'
+    - name: "Intercambio de monedas"
+      weight: 30
+      flow:
+        - post:
+          url: '/exchange'
+          json:
+            baseCurrency: "USD"
+            counterCurrency: "ARS"
+            baseAmount: 100.0
+            baseAccountId: 11
+            counterAccountId: 10

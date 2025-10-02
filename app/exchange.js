@@ -2,6 +2,29 @@ import { nanoid } from "nanoid";
 
 import { init as stateInit, getAccounts as stateAccounts, getRates as stateRates, getLog as stateLog } from "./state.js";
 
+import dgram from "dgram";
+
+// Cliente StatsD (UDP → Graphite/StatsD dentro de la red Docker)
+const statsd = dgram.createSocket("udp4");
+const STATSD_HOST = "graphite"; // nombre del servicio en docker-compose
+const STATSD_PORT = 8125;
+
+// Counter (suma)
+function sendCounter(metric, value = 1) {
+  const msg = Buffer.from(`${metric}:${value}|c`);
+  statsd.send(msg, STATSD_PORT, STATSD_HOST, (err) => {
+    if (err) console.error("StatsD counter error", metric, err);
+  });
+}
+
+// Gauge (valor actual)
+function sendGauge(metric, value) {
+  const msg = Buffer.from(`${metric}:${value}|g`);
+  statsd.send(msg, STATSD_PORT, STATSD_HOST, (err) => {
+    if (err) console.error("StatsD gauge error", metric, err);
+  });
+}
+
 let accounts;
 let rates;
 let log;
@@ -106,6 +129,28 @@ export async function exchange(exchangeRequest) {
 
   //log the transaction and return it
   log.push(exchangeResult);
+
+  // === métricas de negocio ===
+
+  // Contadores de transacciones
+  sendCounter("counters.exchange.total", 1);
+  if (exchangeResult.ok) {
+    sendCounter("counters.exchange.success", 1);
+  } else {
+    sendCounter("counters.exchange.fail", 1);
+  }
+
+  // Volumen y neto por moneda
+  sendCounter(`counters.volume.${baseCurrency}`, baseAmount);
+  sendCounter(`counters.net.${baseCurrency}`, baseAmount);
+  sendCounter(`counters.net.${counterCurrency}`, -exchangeResult.counterAmount);
+
+  // Inconsistencias: gauge con la cantidad actual de cuentas negativas
+  let negatives = 0;
+  for (const acc of accounts) {
+    if (acc.balance < 0) negatives++;
+  }
+  sendGauge("inconsistencies", negatives);
 
   return exchangeResult;
 }

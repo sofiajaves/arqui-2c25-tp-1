@@ -461,6 +461,47 @@
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "title": "Exchanges - Éxito vs Falla",
+      "type": "piechart",
+      "gridPos": { "x": 0, "y": 28, "w": 8, "h": 6 },
+      "targets": [
+        { "refId": "A", "target": "alias(sumSeries(stats.exchange.success), 'Exitosas')" },
+        { "refId": "B", "target": "alias(sumSeries(stats.exchange.fail), 'Fallidas')" }
+      ]
+    },
+    {
+      "title": "Inconsistencias detectadas",
+      "type": "stat",
+      "gridPos": { "x": 8, "y": 28, "w": 8, "h": 6 },
+      "targets": [
+        { "refId": "A", "target": "sumSeries(stats.inconsistencies)" }
+      ]
+    },
+    {
+      "title": "Volumen operado por moneda",
+      "type": "bargauge",
+      "gridPos": { "x": 16, "y": 28, "w": 8, "h": 6 },
+      "targets": [
+        { "refId": "A", "target": "stats.volume.*" }
+      ]
+    },
+    {
+      "title": "Neto por moneda en el tiempo",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 34, "w": 16, "h": 6 },
+      "targets": [
+        { "refId": "A", "target": "stats.net.*" }
+      ]
+    },
+    {
+      "title": "Transacciones por minuto",
+      "type": "stat",
+      "gridPos": { "x": 16, "y": 34, "w": 8, "h": 6 },
+      "targets": [
+        { "refId": "A", "target": "perMinute(stats.exchange.total)" }
+      ]
     }
   ],
   "refresh": "5s",
@@ -551,7 +592,7 @@
     ]
   },
   "time": {
-    "from": "now-3m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {

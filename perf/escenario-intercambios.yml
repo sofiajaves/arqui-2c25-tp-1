@@ -1,0 +1,46 @@
+config:
+  environments:
+    api:
+      target: 'http://localhost:5555' 
+      plugins:
+      statsd:
+        host: localhost
+        port: 8125
+        prefix: "artillery-intercambios"
+  phases:
+    - name: "Fase 1"
+      duration: 20
+      arrivalRate: 1
+      rampTo: 5
+    
+  escenarios:
+    - name: "Nombre del escenario"
+      flow:
+        - get:
+            url: '/rates'
+      weight: 40
+      flow:
+        - post:
+            url: '/exchange'
+            json:
+              baseCurrency: "USD"
+              counterCurrency: "ARS"
+              baseAmount: "{{f $randomInt(50, 100) 2}}"
+              baseAccountId: 11
+              counterAccountId: 10
+    - name: "Intercambio ARS-USD"
+      weight: 40
+      flow:
+        - post:
+            url: '/exchange'
+            json:
+              baseCurrency: "ARS"
+              counterCurrency: "USD"
+              baseAmount: "{{f $randomInt(10000, 100000) 3}}"
+              baseAccountId: 10
+              counterAccountId: 11
+    - name: "Consulta tasas"
+      weight: 20
+      flow:
+        - get:
+            url: '/rates'
