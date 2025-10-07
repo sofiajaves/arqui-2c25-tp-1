@@ -3,8 +3,8 @@ import { StatsD } from "hot-shots";
 import { exchangeMutex } from './mutex.js';
 import { init as stateInit, getAccounts as stateAccounts, getRates as stateRates, getLog as stateLog } from "./state.js";
 
-// ID de instancia para métricas
-const INSTANCE_ID = process.env.INSTANCE_ID || 'unknown';
+// ID de instancia para métricas (se genera automáticamente)
+const INSTANCE_ID = process.env.INSTANCE_ID || `api-${Math.random().toString(36).substr(2, 9)}`;
 
 const statsd = new StatsD({
   host: process.env.STATSD_HOST || "graphite",

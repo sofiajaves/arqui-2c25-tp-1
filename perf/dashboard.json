@@ -24,7 +24,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "aezckeo45emtcb"
+        "uid": "df074ovpqaghsd"
       },
       "fieldConfig": {
         "defaults": {
@@ -147,7 +147,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "aezckeo45emtcb"
+        "uid": "df074ovpqaghsd"
       },
       "fieldConfig": {
         "defaults": {
@@ -229,7 +229,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "aezckeo45emtcb"
+            "uid": "df074ovpqaghsd"
           },
           "refId": "A",
           "target": "alias(stats.gauges.artillery-api.scenarioDuration.median, 'median')"
@@ -237,7 +237,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "aezckeo45emtcb"
+            "uid": "df074ovpqaghsd"
           },
           "refId": "B",
           "target": "alias(stats.gauges.artillery-api.scenarioDuration.p90, 'p90')"
@@ -245,7 +245,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "aezckeo45emtcb"
+            "uid": "df074ovpqaghsd"
           },
           "refId": "C",
           "target": "alias(stats.gauges.artillery-api.scenarioDuration.std, 'std')"
@@ -257,7 +257,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "aezckeo45emtcb"
+        "uid": "df074ovpqaghsd"
       },
       "fieldConfig": {
         "defaults": {
@@ -339,7 +339,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "aezckeo45emtcb"
+            "uid": "df074ovpqaghsd"
           },
           "refCount": 0,
           "refId": "A",
@@ -348,7 +348,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "aezckeo45emtcb"
+            "uid": "df074ovpqaghsd"
           },
           "refCount": 0,
           "refId": "B",
@@ -357,7 +357,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "aezckeo45emtcb"
+            "uid": "df074ovpqaghsd"
           },
           "refCount": 0,
           "refId": "C",
@@ -370,7 +370,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "aezckeo45emtcb"
+        "uid": "df074ovpqaghsd"
       },
       "fieldConfig": {
         "defaults": {
@@ -477,7 +477,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "aezckeo45emtcb"
+            "uid": "df074ovpqaghsd"
           },
           "refId": "A",
           "target": "aliasByNode(stats.gauges.arVault.account.$cuentas.balance, -2)"
@@ -489,7 +489,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "aezckeo45emtcb"
+        "uid": "df074ovpqaghsd"
       },
       "fieldConfig": {
         "defaults": {
@@ -597,7 +597,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "aezckeo45emtcb"
+            "uid": "df074ovpqaghsd"
           },
           "refCount": 0,
           "refId": "A",
@@ -611,7 +611,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "aezckeo45emtcb"
+        "uid": "df074ovpqaghsd"
       },
       "fieldConfig": {
         "defaults": {
@@ -719,7 +719,7 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "aezckeo45emtcb"
+            "uid": "df074ovpqaghsd"
           },
           "refCount": 0,
           "refId": "A",

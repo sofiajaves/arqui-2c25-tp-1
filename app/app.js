@@ -15,9 +15,12 @@ await exchangeInit();
 const app = express();
 const port = 3000;
 
+// Generar ID único para esta instancia
+const INSTANCE_ID = process.env.INSTANCE_ID || `api-${Math.random().toString(36).substr(2, 9)}`;
+
 // Middleware para identificar la instancia
 app.use((req, res, next) => {
-  req.instanceId = process.env.INSTANCE_ID || 'unknown';
+  req.instanceId = INSTANCE_ID;
   res.setHeader('X-Instance-ID', req.instanceId);
   next();
 });
@@ -120,7 +123,7 @@ app.get("/ready", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Exchange API (${process.env.INSTANCE_ID || 'unknown'}) listening on port ${port}`);
+  console.log(`Exchange API (${INSTANCE_ID}) listening on port ${port}`);
 });
 
 export default app;

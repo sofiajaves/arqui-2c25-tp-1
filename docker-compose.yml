@@ -5,7 +5,6 @@ services:
         replicas: 3  # 3 instancias de la API
       environment:
         - NODE_ENV=production
-        - INSTANCE_ID=${HOSTNAME}
         - LOAD_TEST=false
 
     nginx:
