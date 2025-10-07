@@ -15,6 +15,13 @@ await exchangeInit();
 const app = express();
 const port = 3000;
 
+// Middleware para identificar la instancia
+app.use((req, res, next) => {
+  req.instanceId = process.env.INSTANCE_ID || 'unknown';
+  res.setHeader('X-Instance-ID', req.instanceId);
+  next();
+});
+
 app.use(express.json());
 
 // ACCOUNT endpoints
@@ -92,8 +99,28 @@ app.post("/exchange", async (req, res) => {
   }
 });
 
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    instance: req.instanceId,
+    uptime: process.uptime(),
+    memory: process.memoryUsage()
+  });
+});
+
+// Readiness check endpoint
+app.get("/ready", (req, res) => {
+  res.status(200).json({
+    ready: true,
+    timestamp: new Date().toISOString(),
+    instance: req.instanceId
+  });
+});
+
 app.listen(port, () => {
-  console.log(`Exchange API listening on port ${port}`);
+  console.log(`Exchange API (${process.env.INSTANCE_ID || 'unknown'}) listening on port ${port}`);
 });
 
 export default app;

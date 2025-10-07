@@ -3,6 +3,9 @@ import { StatsD } from "hot-shots";
 import { exchangeMutex } from './mutex.js';
 import { init as stateInit, getAccounts as stateAccounts, getRates as stateRates, getLog as stateLog } from "./state.js";
 
+// ID de instancia para métricas
+const INSTANCE_ID = process.env.INSTANCE_ID || 'unknown';
+
 const statsd = new StatsD({
   host: process.env.STATSD_HOST || "graphite",
   port: process.env.STATSD_PORT ? Number(process.env.STATSD_PORT) : 8125,
@@ -168,6 +171,10 @@ export async function exchange(exchangeRequest) {
             process.stdout.write(`[metrics] incrementing volume.${counterCurrency}.buy by ${Math.round(counterAmount)}\n`);
             statsd.increment(`volume.${baseCurrency}.sell`, Math.round(baseAmount));
             statsd.increment(`volume.${counterCurrency}.buy`, Math.round(counterAmount));
+            
+            // Métricas por instancia
+            statsd.gauge(`instances.${INSTANCE_ID}.active_transactions`, 1);
+            statsd.increment(`instances.${INSTANCE_ID}.successful_exchanges`);
           } catch (err) {}
         } else {
           // could not transfer to clients' counter account, return base amount to client
@@ -178,6 +185,7 @@ export async function exchange(exchangeRequest) {
           try {
             process.stdout.write("[metrics] incrementing response.500\n");
             statsd.increment(`response.500`);
+            statsd.increment(`instances.${INSTANCE_ID}.failed_exchanges`);
           } catch (err) {}
         }
       } else {
@@ -188,6 +196,7 @@ export async function exchange(exchangeRequest) {
         try {
           process.stdout.write("[metrics] incrementing response.402\n");
           statsd.increment(`response.402`);
+          statsd.increment(`instances.${INSTANCE_ID}.failed_exchanges`);
         } catch (err) {}
       }
     } else {
@@ -197,6 +206,7 @@ export async function exchange(exchangeRequest) {
       try {
         process.stdout.write("[metrics] incrementing response.500\n");
         statsd.increment(`response.500`);
+        statsd.increment(`instances.${INSTANCE_ID}.failed_exchanges`);
       } catch (err) {}
     }
 
