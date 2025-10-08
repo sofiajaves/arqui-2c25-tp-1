@@ -1,0 +1,43 @@
+config:
+  environments:
+    api:
+      target: "http://localhost:5555"
+      plugins:
+        statsd:
+          host: "localhost"
+          port: 8125
+          prefix: "artillery-recovery"
+
+  pool: 50
+
+  phases:
+    # Warm-up (flujo normal)
+    - name: Warm-up
+      duration: 30
+      arrivalRate: 3
+      scenario: "USD_to_ARS"
+
+    # Simulación de caída (API detenida)
+    - name: During failure
+      duration: 30
+      arrivalRate: 10
+      scenario: "USD_to_ARS"
+
+    # Recuperación (servicio se levanta de nuevo)
+    - name: Recovery
+      duration: 40
+      arrivalRate: 15
+      scenario: "USD_to_ARS"
+
+scenarios:
+  - name: "USD_to_ARS"
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "USD"
+            counterCurrency: "ARS"
+            baseAccountId: "2"
+            counterAccountId: "1"
+            baseAmount: 10
+      - think: 1

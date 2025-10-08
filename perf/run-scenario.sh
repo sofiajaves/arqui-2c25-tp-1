@@ -1,2 +1,3 @@
 #!/bin/sh
-npm run artillery -- run $1.yaml -e $2
+npm install -g artillery-plugin-statsd
+npm run artillery -- run $1 -e $2
