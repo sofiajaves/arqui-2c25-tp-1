@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.2",
-    "nanoid": "^5.1.2"
+    "nanoid": "^5.1.2",
+    "hot-shots": "^9.0.0",
+    "ioredis": "^5.3.2"
   }
 }

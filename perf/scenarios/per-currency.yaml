@@ -1,0 +1,188 @@
+config:
+  target: "http://localhost:5555"
+  plugins:
+    statsd:
+      host: "localhost"
+      port: 8125
+      prefix: "artillery-api"
+
+  phases:
+    - name: ARS→USD
+      duration: 30
+      arrivalRate: 5
+      scenario: "ARS_to_USD"
+
+    - name: USD→ARS
+      duration: 30
+      arrivalRate: 10
+      scenario: "USD_to_ARS"
+
+    - name: ARS→BRL
+      duration: 30
+      arrivalRate: 5
+      scenario: "ARS_to_BRL"
+
+    - name: BRL→ARS
+      duration: 30
+      arrivalRate: 10
+      scenario: "BRL_to_ARS"
+
+    - name: ARS→EUR
+      duration: 30
+      arrivalRate: 5
+      scenario: "ARS_to_EUR"
+
+    - name: EUR→ARS
+      duration: 30
+      arrivalRate: 10
+      scenario: "EUR_to_ARS"
+
+    # --- Escenarios inválidos (deberían dar error) ---
+    - name: USD→BRL
+      duration: 20
+      arrivalRate: 3
+      scenario: "USD_to_BRL"
+
+    - name: BRL→USD
+      duration: 20
+      arrivalRate: 3
+      scenario: "BRL_to_USD"
+
+    - name: EUR→USD
+      duration: 20
+      arrivalRate: 3
+      scenario: "EUR_to_USD"
+
+    - name: BRL→EUR
+      duration: 20
+      arrivalRate: 3
+      scenario: "BRL_to_EUR"
+
+    - name: EUR→BRL
+      duration: 20
+      arrivalRate: 3
+      scenario: "EUR_to_BRL"
+
+scenarios:
+  - name: ARS_to_USD
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "ARS"
+            counterCurrency: "USD"
+            baseAccountId: "1"
+            counterAccountId: "1"
+            baseAmount: 15000
+
+  - name: USD_to_ARS
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "USD"
+            counterCurrency: "ARS"
+            baseAccountId: "1"
+            counterAccountId: "1"
+            baseAmount: 10
+
+  - name: ARS_to_BRL
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "ARS"
+            counterCurrency: "BRL"
+            baseAccountId: "1"
+            counterAccountId: "1"
+            baseAmount: 3000
+
+  - name: BRL_to_ARS
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "BRL"
+            counterCurrency: "ARS"
+            baseAccountId: "1"
+            counterAccountId: "1"
+            baseAmount: 10
+
+  - name: ARS_to_EUR
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "ARS"
+            counterCurrency: "EUR"
+            baseAccountId: "1"
+            counterAccountId: "1"
+            baseAmount: 20000
+
+  - name: EUR_to_ARS
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "EUR"
+            counterCurrency: "ARS"
+            baseAccountId: "1"
+            counterAccountId: "1"
+            baseAmount: 10
+
+
+  # --- Escenarios inválidos ---
+  - name: USD_to_BRL
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "USD"
+            counterCurrency: "BRL"
+            baseAccountId: "1"
+            counterAccountId: "1"
+            baseAmount: 100
+
+  - name: BRL_to_USD
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "BRL"
+            counterCurrency: "USD"
+            baseAccountId: "1"
+            counterAccountId: "1"
+            baseAmount: 100
+
+  - name: EUR_to_USD
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "EUR"
+            counterCurrency: "USD"
+            baseAccountId: "1"
+            counterAccountId: "1"
+            baseAmount: 100
+
+  - name: BRL_to_EUR
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "BRL"
+            counterCurrency: "EUR"
+            baseAccountId: "1"
+            counterAccountId: "1"
+            baseAmount: 100
+
+  - name: EUR_to_BRL
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "EUR"
+            counterCurrency: "BRL"
+            baseAccountId: "1"
+            counterAccountId: "1"
+            baseAmount: 100

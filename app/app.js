@@ -1,99 +1,46 @@
 import express from "express";
-
 import {
-  init as exchangeInit,
-  getAccounts,
+  init as redisInit,
+  disconnect as redisDisconnect,
   setAccountBalance,
+  getPendingTxs,
+  getAccounts,
   getRates,
   setRate,
   getLog,
-  exchange,
-} from "./exchange.js";
+} from "./redis.js";
+import routes from "./src/routes.js";
+import { exchange } from "./src/services/exchangeService.js";
 
-await exchangeInit();
+// Initialize Redis (idempotent single connection)
+await redisInit();
+
+const pendingTxs = await getPendingTxs();
+
+for (const tx of pendingTxs) {
+  console.log(`Procesando tx pendiente: ${tx.id}`);
+  await exchange(tx, true);
+}
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 
-// ACCOUNT endpoints
+// Mount routes
+app.use("/", routes);
 
-app.get("/accounts", (req, res) => {
-  res.json(getAccounts());
-});
-
-app.put("/accounts/:id/balance", (req, res) => {
-  const accountId = req.params.id;
-  const { balance } = req.body;
-
-  if (!accountId || !balance) {
-    return res.status(400).json({ error: "Malformed request" });
-  } else {
-    setAccountBalance(accountId, balance);
-
-    res.json(getAccounts());
-  }
-});
-
-// RATE endpoints
-
-app.get("/rates", (req, res) => {
-  res.json(getRates());
-});
-
-app.put("/rates", (req, res) => {
-  const { baseCurrency, counterCurrency, rate } = req.body;
-
-  if (!baseCurrency || !counterCurrency || !rate) {
-    return res.status(400).json({ error: "Malformed request" });
-  }
-
-  const newRateRequest = { ...req.body };
-  setRate(newRateRequest);
-
-  res.json(getRates());
-});
-
-// LOG endpoint
-
-app.get("/log", (req, res) => {
-  res.json(getLog());
-});
-
-// EXCHANGE endpoint
-
-app.post("/exchange", async (req, res) => {
-  const {
-    baseCurrency,
-    counterCurrency,
-    baseAccountId,
-    counterAccountId,
-    baseAmount,
-  } = req.body;
-
-  if (
-    !baseCurrency ||
-    !counterCurrency ||
-    !baseAccountId ||
-    !counterAccountId ||
-    !baseAmount
-  ) {
-    return res.status(400).json({ error: "Malformed request" });
-  }
-
-  const exchangeRequest = { ...req.body };
-  const exchangeResult = await exchange(exchangeRequest);
-
-  if (exchangeResult.ok) {
-    res.status(200).json(exchangeResult);
-  } else {
-    res.status(500).json(exchangeResult);
-  }
-});
-
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Exchange API listening on port ${port}`);
 });
+
+// Graceful shutdown
+for (const signal of ["SIGINT", "SIGTERM"]) {
+  process.on(signal, async () => {
+    console.log(`\nReceived ${signal}, shutting down...`);
+    await redisDisconnect();
+    process.exit(0);
+  });
+}
 
 export default app;

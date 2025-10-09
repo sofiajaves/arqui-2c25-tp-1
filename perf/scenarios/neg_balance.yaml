@@ -1,0 +1,26 @@
+config:
+  environments:
+    api:
+      target: "http://localhost:5555"
+      plugins:
+        statsd:
+          host: "localhost"
+          port: 8125
+          prefix: "artillery-api"
+
+  phases:
+    - name: Spike
+      duration: 20
+      arrivalRate: 15
+
+scenarios:
+  - name: Spike - short burst
+    flow:
+      - post:
+          url: "/exchange"
+          json:
+            baseCurrency: "USD"
+            counterCurrency: "ARS"
+            baseAccountId: "2"
+            counterAccountId: "1"
+            baseAmount: 100

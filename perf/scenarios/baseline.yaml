@@ -1,0 +1,22 @@
+config:
+  environments:
+    api:
+      target: "http://localhost:5555"
+      plugins:
+        statsd:
+          host: "localhost"
+          port: 8125
+          prefix: "artillery-api"
+
+  pool: 5
+
+  phases:
+    - name: Baseline
+      duration: 30
+      arrivalRate: 1
+      
+scenarios:
+  - name: Baseline - GET rates
+    flow:
+      - get:
+          url: "/rates"

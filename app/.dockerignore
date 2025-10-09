@@ -1,0 +1,14 @@
+# Ignore node modules (will be installed in image)
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Ignore local state backups or editor files
+*.swp
+.DS_Store
+.git
+.gitignore
+
+# Ignore test coverage or temp
+coverage
+.tmp
