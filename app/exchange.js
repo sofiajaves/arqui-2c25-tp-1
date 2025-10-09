@@ -117,13 +117,19 @@ export async function exchange(exchangeRequest) {
 
         // business metrics: volume by currency (rounded for counter semantics)
         try {
-          process.stdout.write(`[metrics] incrementing volume.${baseCurrency}.sell by ${Math.round(baseAmount)}\n`);
-          process.stdout.write(`[metrics] incrementing volume.${counterCurrency}.buy by ${Math.round(counterAmount)}\n`);
-          statsd.increment(`response.200`);
-          statsd.gauge(`account.${baseAccount.id}.balance`, baseAccount.balance);
-          statsd.gauge(`account.${counterAccount.id}.balance`, counterAccount.balance);
-          statsd.increment(`volume.${baseCurrency}.sell`, Math.round(baseAmount));
-          statsd.increment(`volume.${counterCurrency}.buy`, Math.round(counterAmount));
+          // Metrics
+            statsd.increment(`volume.${baseCurrency}.acum`, Math.round(baseAmount));
+            statsd.increment(`volume.${counterCurrency}.acum`, Math.round(counterAmount));
+            statsd.increment(`volume.${baseCurrency}.neto`, -Math.round(baseAmount));
+            statsd.increment(
+              `volume.${counterCurrency}.neto`,
+              Math.round(counterAmount)
+            );
+            statsd.increment(`volume.${baseCurrency}.sell`, Math.round(baseAmount));
+            statsd.increment(
+              `volume.${counterCurrency}.buy`,
+              Math.round(counterAmount)
+            );
         } catch (err) {}
       } else {
         // could not transfer to clients' counter account, return base amount to client
@@ -157,8 +163,11 @@ export async function exchange(exchangeRequest) {
   // timing of the whole request (ms)
   try {
     process.stdout.write("[metrics] timing exchange.request.duration\n");
-    statsd.timing("exchange.request.duration", Date.now() - start);
+    statsd.timing("exchange.duration", Date.now() - start);
   } catch (err) {}
+
+  statsd.gauge(`account.${baseAccount.id}.balance`, baseAccount.balance);
+  statsd.gauge(`account.${counterAccount.id}.balance`, counterAccount.balance);
 
   // log the transaction and return it
   log.push(exchangeResult);

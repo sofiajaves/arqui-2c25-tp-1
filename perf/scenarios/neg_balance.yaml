@@ -11,7 +11,7 @@ config:
   phases:
     - name: Spike
       duration: 20
-      arrivalRate: 15
+      arrivalRate: 100
 
 scenarios:
   - name: Spike - short burst
