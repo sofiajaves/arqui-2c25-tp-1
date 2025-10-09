@@ -24,7 +24,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "aezckeo45emtcb"
+        "uid": "ef0dze3qy7ugwe"
       },
       "fieldConfig": {
         "defaults": {
@@ -64,7 +64,23 @@
               "mode": "off"
             }
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "stats.gauges.artillery-api.codes.200": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "200"
+                },
+                "stats.gauges.artillery-api.codes.500": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "500"
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -109,11 +125,26 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "stats.gauges.artillery-api.codes.500"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 8,
         "x": 0,
         "y": 0
@@ -137,17 +168,39 @@
         {
           "refCount": 0,
           "refId": "A",
-          "target": "stats.arVault.response.*",
+          "target": "alias(stats.gauges.artillery-api.codes.200, '200')",
+          "textEditor": true
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "ef0dze3qy7ugwe"
+          },
+          "hide": false,
+          "refCount": 0,
+          "refId": "B",
+          "target": "alias(stats.gauges.artillery-api.codes.400, '400')",
+          "textEditor": true
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "ef0dze3qy7ugwe"
+          },
+          "hide": false,
+          "refCount": 0,
+          "refId": "C",
+          "target": "alias(stats.gauges.artillery-api.codes.500, '500')",
           "textEditor": true
         }
       ],
-      "title": "Prueba",
+      "title": "Respuestas",
       "type": "timeseries"
     },
     {
       "datasource": {
         "type": "graphite",
-        "uid": "aezckeo45emtcb"
+        "uid": "ef0dze3qy7ugwe"
       },
       "fieldConfig": {
         "defaults": {
@@ -202,10 +255,41 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mean"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "median"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 8,
         "x": 8,
         "y": 0
@@ -229,35 +313,325 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "aezckeo45emtcb"
+            "uid": "ef0dze3qy7ugwe"
           },
+          "refCount": 0,
           "refId": "A",
-          "target": "alias(stats.gauges.artillery-api.scenarioDuration.median, 'median')"
+          "target": "alias(stats.gauges.artillery-api.scenarioDuration.median, 'median')",
+          "textEditor": false
         },
         {
           "datasource": {
             "type": "graphite",
-            "uid": "aezckeo45emtcb"
+            "uid": "ef0dze3qy7ugwe"
           },
+          "refCount": 0,
+          "refId": "C",
+          "target": "alias(stats.gauges.artillery-api.scenarioDuration.mean, 'mean')",
+          "textEditor": false
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "ef0dze3qy7ugwe"
+          },
+          "refCount": 0,
           "refId": "B",
           "target": "alias(stats.gauges.artillery-api.scenarioDuration.p90, 'p90')"
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "aezckeo45emtcb"
-          },
-          "refId": "C",
-          "target": "alias(stats.gauges.artillery-api.scenarioDuration.std, 'std')"
         }
       ],
-      "title": "Scenario duration",
+      "title": "Tiempo de usuario",
       "type": "timeseries"
     },
     {
       "datasource": {
         "type": "graphite",
-        "uid": "aezckeo45emtcb"
+        "uid": "ef0dze3qy7ugwe"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "median"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "ef0dze3qy7ugwe"
+          },
+          "refCount": 0,
+          "refId": "A",
+          "target": "alias(stats.timers.arVault.exchange.duration.mean, 'mean')",
+          "textEditor": false
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "ef0dze3qy7ugwe"
+          },
+          "refCount": 0,
+          "refId": "B",
+          "target": "alias(stats.timers.arVault.exchange.duration.median, 'median')",
+          "textEditor": true
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "ef0dze3qy7ugwe"
+          },
+          "refCount": 0,
+          "refId": "C",
+          "target": "alias(stats.timers.arVault.exchange.duration.upper_90, 'p90')",
+          "textEditor": true
+        }
+      ],
+      "title": "Tiempo de api",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "ef0dze3qy7ugwe"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": ["USD"],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "ef0dze3qy7ugwe"
+          },
+          "hide": false,
+          "refCount": 0,
+          "refId": "B",
+          "target": "alias(stats.gauges.arVault.account.1.balance, 'ARS')",
+          "textEditor": true
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "ef0dze3qy7ugwe"
+          },
+          "hide": false,
+          "refCount": 0,
+          "refId": "C",
+          "target": "alias(stats.gauges.arVault.account.2.balance, 'USD')",
+          "textEditor": true
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "ef0dze3qy7ugwe"
+          },
+          "hide": false,
+          "refCount": 0,
+          "refId": "D",
+          "target": "alias(stats.gauges.arVault.account.3.balance, 'EUR')",
+          "textEditor": true
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "ef0dze3qy7ugwe"
+          },
+          "hide": false,
+          "refCount": 0,
+          "refId": "E",
+          "target": "alias(stats.gauges.arVault.account.4.balance, 'BRL')",
+          "textEditor": true
+        }
+      ],
+      "title": "Balance de cuentas internas",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "ef0dze3qy7ugwe"
       },
       "fieldConfig": {
         "defaults": {
@@ -315,12 +689,12 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
-        "w": 8,
-        "x": 16,
-        "y": 0
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 17
       },
-      "id": 4,
+      "id": 10,
       "options": {
         "legend": {
           "calcs": [],
@@ -337,40 +711,19 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "graphite",
-            "uid": "aezckeo45emtcb"
-          },
           "refCount": 0,
           "refId": "A",
-          "target": "alias(stats.timers.arVault.exchange.request.duration.mean, 'mean')"
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "aezckeo45emtcb"
-          },
-          "refCount": 0,
-          "refId": "B",
-          "target": "alias(stats.timers.arVault.exchange.request.duration.median, 'median')"
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "aezckeo45emtcb"
-          },
-          "refCount": 0,
-          "refId": "C",
-          "target": "alias(stats.timers.arVault.exchange.request.duration.upper_90, 'p90')"
+          "target": "aliasByNode(stats.arVault.volume.*.acum, -2)",
+          "textEditor": true
         }
       ],
-      "title": "Exchange duration",
+      "title": "Volumen acumulado",
       "type": "timeseries"
     },
     {
       "datasource": {
         "type": "graphite",
-        "uid": "aezckeo45emtcb"
+        "uid": "ef0dze3qy7ugwe"
       },
       "fieldConfig": {
         "defaults": {
@@ -425,40 +778,15 @@
             ]
           }
         },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "2"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 10,
-        "w": 24,
-        "x": 0,
-        "y": 6
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 17
       },
-      "id": 6,
+      "id": 11,
       "options": {
         "legend": {
           "calcs": [],
@@ -475,21 +803,19 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "graphite",
-            "uid": "aezckeo45emtcb"
-          },
+          "refCount": 0,
           "refId": "A",
-          "target": "aliasByNode(stats.gauges.arVault.account.$cuentas.balance, -2)"
+          "target": "aliasByNode(stats.arVault.volume.*.neto, -2)",
+          "textEditor": true
         }
       ],
-      "title": "ArVault accounts balances",
+      "title": "Volumen neto",
       "type": "timeseries"
     },
     {
       "datasource": {
         "type": "graphite",
-        "uid": "aezckeo45emtcb"
+        "uid": "ef0dze3qy7ugwe"
       },
       "fieldConfig": {
         "defaults": {
@@ -545,38 +871,13 @@
           },
           "unit": "short"
         },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "ARS"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 25
       },
       "id": 7,
       "options": {
@@ -597,12 +898,12 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "aezckeo45emtcb"
+            "uid": "ef0dze3qy7ugwe"
           },
           "refCount": 0,
           "refId": "A",
           "target": "aliasByNode(stats.arVault.volume.*.buy, -2)",
-          "textEditor": false
+          "textEditor": true
         }
       ],
       "title": "Volumen de Compra (Buy)",
@@ -611,7 +912,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "aezckeo45emtcb"
+        "uid": "ef0dze3qy7ugwe"
       },
       "fieldConfig": {
         "defaults": {
@@ -667,38 +968,13 @@
           },
           "unit": "short"
         },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "USD"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 25
       },
       "id": 8,
       "options": {
@@ -719,12 +995,12 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "aezckeo45emtcb"
+            "uid": "ef0dze3qy7ugwe"
           },
           "refCount": 0,
           "refId": "A",
           "target": "aliasByNode(stats.arVault.volume.*.sell, -2)",
-          "textEditor": true
+          "textEditor": false
         }
       ],
       "title": "Volumen de Venta (Sell)",
@@ -732,51 +1008,11 @@
     }
   ],
   "preload": false,
-  "refresh": "",
+  "refresh": "auto",
   "schemaVersion": 40,
   "tags": [],
   "templating": {
     "list": [
-      {
-        "current": {
-          "text": [
-            "1",
-            "2"
-          ],
-          "value": [
-            "1",
-            "2"
-          ]
-        },
-        "includeAll": true,
-        "label": "Cuentas",
-        "multi": true,
-        "name": "cuentas",
-        "options": [
-          {
-            "selected": true,
-            "text": "1",
-            "value": "1"
-          },
-          {
-            "selected": true,
-            "text": "2",
-            "value": "2"
-          },
-          {
-            "selected": false,
-            "text": "3",
-            "value": "3"
-          },
-          {
-            "selected": false,
-            "text": "4",
-            "value": "4"
-          }
-        ],
-        "query": "1,2,3,4",
-        "type": "custom"
-      },
       {
         "current": {
           "text": "arVault",
@@ -849,13 +1085,13 @@
     ]
   },
   "time": {
-    "from": "now-4m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Main dashboard",
   "uid": "arxIPammk",
-  "version": 10,
+  "version": 21,
   "weekStart": ""
 }
