@@ -9,18 +9,18 @@ config:
           prefix: "artillery-api"
 
   phases:
-    - name: Spike
-      duration: 20
-      arrivalRate: 100
+    - name: Ramp
+      duration: 180
+      arrivalRate: 15
 
 scenarios:
-  - name: Spike - short burst
+  - name: Ramp - exchange
     flow:
       - post:
           url: "/exchange"
           json:
-            baseCurrency: "USD"
-            counterCurrency: "ARS"
+            baseCurrency: "ARS"
+            counterCurrency: "USD"
             baseAccountId: "2"
             counterAccountId: "1"
-            baseAmount: 100
+            baseAmount: 1000
